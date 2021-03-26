@@ -1,0 +1,20 @@
+track Human_K562_Tn5_NakedDNA_rep1.InsertSites
+bigDataUrl Human_K562_Tn5_NakedDNA_rep1.InsertSites.bigWig
+shortLabel K562_rep1
+longLabel K562_rep1
+type bigWig
+visibility full
+
+track Human_K562_Tn5_NakedDNA_rep2.InsertSites
+bigDataUrl Human_K562_Tn5_NakedDNA_rep2.InsertSites.bigWig
+shortLabel K562_rep2
+longLabel K562_rep2
+type bigWig
+visibility full
+
+track Human_K562_Tn5_NakedDNA_rep3.InsertSites
+bigDataUrl Human_K562_Tn5_NakedDNA_rep3.InsertSites.bigWig
+shortLabel K562_rep3
+longLabel K562_rep3
+type bigWig
+visibility full

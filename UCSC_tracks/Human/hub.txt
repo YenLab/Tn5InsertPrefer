@@ -1,0 +1,5 @@
+hub Tn5InsertPreferhg38
+shortLabel Tn5hg38
+longLabel Tn5_Insertion_Preference_hg38
+genomesFile genomes.txt
+email  hughiez047@gmail.com

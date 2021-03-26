@@ -1,0 +1,34 @@
+track Mouse_E14_Tn5_NakedDNA_rep1.InsertSites
+bigDataUrl Mouse_E14_Tn5_NakedDNA_rep1.InsertSites.bigWig
+shortLabel E14_rep1
+longLabel E14_rep1
+type bigWig
+visibility full
+
+track Mouse_E14_Tn5_NakedDNA_rep2.InsertSites
+bigDataUrl Mouse_E14_Tn5_NakedDNA_rep2.InsertSites.bigWig
+shortLabel E14_rep2
+longLabel E14_rep2
+type bigWig
+visibility full
+
+track Mouse_Ckit_Tn5_NakedDNA_rep1.InsertSites
+bigDataUrl Mouse_Ckit_Tn5_NakedDNA_rep1.InsertSites.bigWig
+shortLabel HSPC_rep1
+longLabel HSPC_rep1
+type bigWig
+visibility full
+
+track Mouse_Ckit_Tn5_NakedDNA_rep2.InsertSites
+bigDataUrl Mouse_Ckit_Tn5_NakedDNA_rep2.InsertSites.bigWig
+shortLabel HSPC_rep2
+longLabel HSPC_rep2
+type bigWig
+visibility full
+
+track Mouse_Ckit_Tn5_NakedDNA_rep3.InsertSites
+bigDataUrl Mouse_Ckit_Tn5_NakedDNA_rep3.InsertSites.bigWig
+shortLabel HSPC_rep3
+longLabel HSPC_rep3
+type bigWig
+visibility full
