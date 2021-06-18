@@ -1,34 +1,69 @@
 track Mouse_E14_Tn5_NakedDNA_rep1.InsertSites
 bigDataUrl Mouse_E14_Tn5_NakedDNA_rep1.InsertSites.bigWig
-shortLabel E14_rep1
-longLabel E14_rep1
+shortLabel E14_NakedDNA_rep1
+longLabel E14_NakedDNA_rep1
 type bigWig
 visibility full
 
 track Mouse_E14_Tn5_NakedDNA_rep2.InsertSites
 bigDataUrl Mouse_E14_Tn5_NakedDNA_rep2.InsertSites.bigWig
-shortLabel E14_rep2
-longLabel E14_rep2
+shortLabel E14_NakedDNA_rep2
+longLabel E14_NakedDNA_rep2
+type bigWig
+visibility full
+
+track Mouse_ESC_Tn5_ATACseq_rep1.InsertSites.bigWig
+bigDataUrl Mouse_ESC_Tn5_ATACseq_rep1.InsertSites.bigWig
+shortLabel E14_ATAC-seq_rep1
+longLabel E14_ATAC-seq_rep1
+type bigWig
+visibility full
+
+track Mouse_ESC_Tn5_ATACseq_rep2.InsertSites.bigWig
+bigDataUrl Mouse_ESC_Tn5_ATACseq_rep2.InsertSites.bigWig
+shortLabel E14_ATAC-seq_rep2
+longLabel E14_ATAC-seq_rep2
+type bigWig
+visibility full
+
+track Mouse_ESC_Tn5_ATACseq_rep3.InsertSites.bigWig
+bigDataUrl Mouse_ESC_Tn5_ATACseq_rep3.InsertSites.bigWig
+shortLabel E14_ATAC-seq_rep3
+longLabel E14_ATAC-seq_rep3
 type bigWig
 visibility full
 
 track Mouse_Ckit_Tn5_NakedDNA_rep1.InsertSites
 bigDataUrl Mouse_Ckit_Tn5_NakedDNA_rep1.InsertSites.bigWig
-shortLabel HSPC_rep1
-longLabel HSPC_rep1
+shortLabel HSPC_NakedDNA_rep1
+longLabel HSPC_NakedDNA_rep1
 type bigWig
 visibility full
 
 track Mouse_Ckit_Tn5_NakedDNA_rep2.InsertSites
 bigDataUrl Mouse_Ckit_Tn5_NakedDNA_rep2.InsertSites.bigWig
-shortLabel HSPC_rep2
-longLabel HSPC_rep2
+shortLabel HSPC_NakedDNA_rep2
+longLabel HSPC_NakedDNA_rep2
 type bigWig
 visibility full
 
 track Mouse_Ckit_Tn5_NakedDNA_rep3.InsertSites
 bigDataUrl Mouse_Ckit_Tn5_NakedDNA_rep3.InsertSites.bigWig
-shortLabel HSPC_rep3
-longLabel HSPC_rep3
+shortLabel HSPC_NakedDNA_rep3
+longLabel HSPC_NakedDNA_rep3
+type bigWig
+visibility full
+
+track Mouse_Ckit_Tn5_ATACseq_rep1.InsertSites.bigWig
+bigDataUrl Mouse_Ckit_Tn5_ATACseq_rep1.InsertSites.bigWig
+shortLabel HSPC_ATAC-seq_rep1
+longLabel HSPC_ATAC-seq_rep1
+type bigWig
+visibility full
+
+track Mouse_Ckit_Tn5_ATACseq_rep2.InsertSites.bigWig
+bigDataUrl Mouse_Ckit_Tn5_ATACseq_rep2.InsertSites.bigWig
+shortLabel HSPC_ATAC-seq_rep2
+longLabel HSPC_ATAC-seq_rep2
 type bigWig
 visibility full

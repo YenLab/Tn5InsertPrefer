@@ -25,8 +25,7 @@ ggplot(mer6,aes(rich,V2)) +
   geom_boxplot(aes(fill = rich), color = c("#66A61E","#A6761D","#E7298A")[3])+
   ylim(0,1) + 
   stat_compare_means(method = "wilcox.test", paired = F, 
-                     comparisons = list(c("AT(6)", "AT(3)"),
-                                        c("AT(6)", "AT(1)"))) +
+                     comparisons = list(c("AT(6)", "AT(3)"), c("AT(6)", "AT(1)"))) +
   facet_wrap(~ cutQ, ncol = 3, scales = "free_x") +
   labs(x = "", y = "Relative Tn5 insert. freq.") + 
   scale_fill_manual(values = rev(colorRampPalette(brewer.pal(3,"Greys"))(7))) + 
