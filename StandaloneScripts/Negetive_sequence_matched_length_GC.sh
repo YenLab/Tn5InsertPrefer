@@ -23,14 +23,18 @@ FASTA_FILE=$3
 Iter=$4
 
 #1. Process input bed file to obtain GC content
-cut -f 1-3 ${bed_file} | bedtools nuc -fi ${FASTA_FILE} -bed - | sed '1d' | awk -v FS="\t" -v OFS="\t" '{print "ref_"$1,$2,$3,$5}' > ${bed_file}.fabed
+cut -f 1-3 ${bed_file} \
+| bedtools nuc -fi ${FASTA_FILE} -bed - \
+| sed '1d' | awk -v FS="\t" -v OFS="\t" '{print "ref_"$1,$2,$3,$5}' > ${bed_file}.fabed
 
 #2. Generate sequence pools for comparison
 for i in `seq 1 ${Iter}`
 do
 #    echo "Generating ${i} dataset..."
-    cut -f 1-3 ${bed_file} | bedtools shuffle -g ${GENOME_SIZE} -noOverlapping -i - \
-    | bedtools nuc -fi ${FASTA_FILE} -bed - | sed '1d' | awk -v FS="\t" -v OFS="\t" '{print $1,$2,$3,$5}' > ${bed_file}_shuf_${i}.fabed
+    cut -f 1-3 ${bed_file} \
+    | bedtools shuffle -g ${GENOME_SIZE} -noOverlapping -i - \
+    | bedtools nuc -fi ${FASTA_FILE} -bed - | sed '1d' \
+    | awk -v FS="\t" -v OFS="\t" '{print $1,$2,$3,$5}' > ${bed_file}_shuf_${i}.fabed
 done
 
 #3. Compare GC content between ref bed and pools, line by line
@@ -45,7 +49,7 @@ do
 
     #The rank of ref line will be captured, and the content be kept for output
     ref_line=`grep -n --color="never" "ref" ${Proc_file} | sed "s/:.*//g"`
-    awk -v FS="\t" -v OFS="\t" -v line=${ref_line} 'FNR==line {print $0}' ${Proc_file}| cut -f 2-5 | sed "s/ref_//g"> ${bed_file}_tmp
+    awk -v FS="\t" -v OFS="\t" -v line=${ref_line} 'FNR==line {print $0}' ${Proc_file} | cut -f 2-5 | sed "s/ref_//g"> ${bed_file}_tmp
 
     #just 1 line ahead will be selected with similar GC content. So, larger pool get more similar GC sequence, but slower :)
     if [ ${ref_line} -eq 1 ]

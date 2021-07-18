@@ -141,7 +141,7 @@ remove <- tabs$Var1[which(tabs$Freq!=11)]
 train_selected <- train[! train$V1 %in% remove,]
 train_selected$V2 <- as.factor(train_selected$V2)
 
-pdf("Fig3D_Top.DNAmeEffectDeciles_ESCChromatin.pdf", height = 8, width = 8)
+pdf("DNAmeEffectDeciles_ESCChromatin.pdf", height = 8, width = 8)
 ggplot(train_selected, aes(x = V2, y = V3)) + 
   geom_boxplot(fill = "#66A61E", notch=F, outlier.shape = NA, size=0.8) +
   stat_compare_means(method = "t.test", paired = F, 
@@ -186,7 +186,7 @@ remove <- tabs$Var1[which(tabs$Freq!=11)]
 train_selected <- train[! train$V1 %in% remove,]
 train_selected$V2 <- as.factor(train_selected$V2)
 
-pdf("Fig3D_Middle.NucleosomeDeciles_ESCChromatin.pdf", height = 8, width = 8)
+pdf("NucleosomeDeciles_ESCChromatin.pdf", height = 8, width = 8)
 ggplot(train_selected, aes(x = V2, y = V5)) + 
   geom_boxplot(fill = "#D95F02", notch=F, outlier.shape = NA, size=0.8) +
   stat_compare_means(method = "t.test", paired = F, 
@@ -230,7 +230,7 @@ train_selected <- train[! train$V1 %in% remove,]
 train_selected[,4] <- scale(train_selected[,4] )
 train_selected$V2 <- as.factor(train_selected$V2)
 
-pdf("Fig3D_Bottom.DNAmeEffectDeciles_ESCChromatin.pdf", height = 8, width = 8)
+pdf("DNAmeEffectDeciles_ESCChromatin.pdf", height = 8, width = 8)
 ggplot(train_selected, aes(x = V2, y = V4)) + 
   geom_boxplot(fill = "#66A61E", notch=F, outlier.shape = NA, size=0.8) +
   stat_compare_means(method = "t.test", paired = F, 
