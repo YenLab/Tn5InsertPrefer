@@ -68,7 +68,7 @@ do
   prefixDupExt=${base}_9bp_duplicates_ext21bp
   bedtools slop -b 21 -i ${base}_9bp_duplicates.bed -g ${GENOME_SIZE_chrM} > ${prefixDupExt}.bed
 
-  #. Using shuffed 500,000 sequences, three times
+  #. Using shuffled 500,000 sequences, three times
   for j in 1 2 3
   do
     LenShufDup=500000
@@ -111,7 +111,7 @@ do
   for t in `seq 0 1`
     do
 
-    #1. make separte threshold files
+    #1. make separate threshold files
     T=`expr ${t} + 2` 
     python ~/Zhang_Scripts/Zhang/Tn5_Cuttingsites_frequency.py -i ${i} -l 0 -r 1 -t ${t} -T ${T} -o ${base}_t${t}T${T}_l0r1.bed
     sort -k1,1 -k2,2n ${base}_t${t}T${T}_l0r1.bed > tmp && mv tmp ${base}_t${t}T${T}_l0r1.bed

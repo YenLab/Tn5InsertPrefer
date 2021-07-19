@@ -1,5 +1,5 @@
 #!/bin/bash
-#This script is used for searching potentail Tn5 motifs on all species
+#This script is used for searching potential Tn5 motifs on all species
 
 #=========================================================================================
 # Search genome-wide potential motifs using FIMO, with MEME returned PWM

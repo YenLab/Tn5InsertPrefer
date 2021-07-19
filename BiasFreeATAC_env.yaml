@@ -1,0 +1,20 @@
+name: BiasFreeATAC_env
+
+channels:
+  - bioconda
+  - conda-forge
+
+dependencies:
+  - fastqc
+  - trimmomatic
+  - pigz
+  - bowtie2
+  - bwa
+  - samtools
+  - bedtools
+  - picard
+  - ucsc-bigwigtobedgraph
+  - macs2
+  - genometools
+  - rust
+  - cargo

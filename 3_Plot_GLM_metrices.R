@@ -12,7 +12,7 @@ suppressPackageStartupMessages(library(Logolas))
 # ==============================================================================
 # 0. Set up utilities
 # ==============================================================================
-# Set up DNA shape featrues
+# Set up DNA shape features
 all_shape <- c("MGW", "HelT","ProT","Roll","EP",  
                "Stretch","Tilt","Buckle","Shear","Opening","Rise","Shift","Stagger","Slide")
 
@@ -31,7 +31,7 @@ plot_gradient_predictors <- function(files){
   for (file in files){
     res <- read.table(file)
     colnames(res) <- c("AUROC","Sensitivity","Specificity","AUPRC","Precision",
-                       "Recall","F-score","Accurancy","plan")
+                       "Recall","F-score","Accuracy","plan")
     plot_mat[,file] <- res$Accurancy
   }
   
@@ -49,12 +49,12 @@ plot_gradient_predictors <- function(files){
   #Select predictors for plot
   plot_mat_final <- plot_mat
   plot_mat_melt <- reshape2::melt(plot_mat_final,c("shape"))
-  colnames(plot_mat_melt) <- c("shape", "sample","Accurancy")
+  colnames(plot_mat_melt) <- c("shape", "sample","Accuracy")
   
   plot_mat_melt <- plot_mat_melt[plot_mat_melt$shape %in% 
                                    c("motif_","4shapes","14shapes","motif + 14shapes","motif + 4shapes"),]
   
-  #seperate original and shuffled samples
+  #separate original and shuffled samples
   plot_mat_melt_true <- plot_mat_melt[-grep("_shuffled", plot_mat_melt$sample),]
   plot_mat_melt_true$species <- gsub("_.*","",plot_mat_melt_true$sample)
   #replace sample names for better visualization

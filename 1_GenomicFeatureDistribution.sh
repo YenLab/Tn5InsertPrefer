@@ -20,7 +20,7 @@ do
   python ~/Zhang_Scripts/Zhang/Genomic_feature_occupancy_significance_v2.py -g ${GENOME_SIZE_NUM} -f ${FEATURE_PATH} \
   -s ${base}_rb.bed -o ${base}.feature.out -r 0 
 
-  #Remove outlier cut sites for calculation
+  #Remove outliers cut sites for calculation
   python ~/Zhang_Scripts/Zhang/Genomic_feature_occupancy_significance_v2.py -g ${GENOME_SIZE_NUM} -f ${FEATURE_PATH} \
   -s ${base}_rb.bed -o ${base}_r0.05.feature.out -r 0.05
 
@@ -33,7 +33,7 @@ do
   python ~/Zhang_Scripts/Zhang/Genomic_feature_occupancy_significance_v2.py -g ${GENOME_SIZE_NUM} -f ${FEATURE_PATH} \
   -s ${base}_rb_uq.bed -o ${base}_uq.feature.out -r 0
 
-  #Remove outlier unique cut sites for calculation
+  #Remove outliers unique cut sites for calculation
   nohup python ~/Zhang_Scripts/Zhang/Genomic_feature_occupancy_significance_v2.py -g ${GENOME_SIZE_NUM} -f ${FEATURE_PATH} \
   -s ${base}_rb_uq.bed -o ${base}_uq_r0.05.feature.out -r 0.05 &
 done

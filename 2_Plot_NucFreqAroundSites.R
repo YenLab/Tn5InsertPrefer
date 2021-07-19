@@ -54,7 +54,7 @@ plot_Nuc_freqs_around <- function(file, flank_window = 25, plot_type = "dinuc"){
     geom_line(aes(linetype=cond)) + 
     ylim(0.2,0.8) + 
     theme_bw() +
-    labs(size= "Nitrogen", x="Relative postion to Tn5 cut center (bp)", y = "Nucleotide frequency") +
+    labs(size= "Nitrogen", x="Relative position to Tn5 cut center (bp)", y = "Nucleotide frequency") +
     theme(
       plot.title = element_text(color="black", size=20, face="bold"),
       axis.title.x = element_text(color="black", size=14, face="bold"),

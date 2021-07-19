@@ -4,7 +4,7 @@ library(ggpubr)
 library(RColorBrewer)
 library(networkD3)
 
-#This scipt is for analyzing DNAme effect on Tn5 cut
+#This script is for analyzing DNAme effect on Tn5 cut
 #=========================================================================================
 # Integrate data matrix and normalization
 #=========================================================================================
@@ -43,7 +43,7 @@ trim_outliers <- function(all_df_scaled, trim = 1){
 #Z-scale
 all_df[,4:5] <- scale(all_df[,4:5], center = T, scale = T)
 
-#Trim top 1% outlies to relieve data skewness
+#Trim top 1% outliers to relieve data skewness
 all_df_scaled <- trim_outliers(all_df, trim = 1)
 all_df_selected_1 <- reshape2::melt(all_df_scaled[c("Tn5_A","Tn5_B","Condition")],c("Condition"))
 

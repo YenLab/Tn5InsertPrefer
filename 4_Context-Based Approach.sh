@@ -11,7 +11,7 @@
 ##########################################################################
 
 # =======================================================================================
-# Maked whole matrix of 9mer-based information
+# Make whole matrix of 9mer-based information
 # =======================================================================================
 #Make tiling windows along the Mouse genome (This take many resources!)
 source /public/home/zhy/Tn5_bias/scripts/0.utilities.sh && Configuration_info mm10

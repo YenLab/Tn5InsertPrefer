@@ -56,7 +56,7 @@ do
 	bedtools getfasta -fi ${FASTA_FILE} -bed ${tr_Prefix}_uncut_ext25bp.bed -fo ${tr_Prefix}_uncut_ext25bp.fa
 
 	rm -f ${base}_random.bed
-	#Remove blacklist because I saw some sites are extreamly Tn5 prefered, which fall within blacklist, may bias our classical analysis
+	#Remove blacklist because I saw some sites are extremely Tn5 preferred, which fall within blacklist, may bias our classical analysis
 	#There are some patches and scaffolds need to be remove avoid misleading
 
 	if [[ ${blacklist} ]]; then
@@ -64,7 +64,7 @@ do
 		bedtools intersect -nonamecheck -a ${i} -b ${blacklist} -v > tmp && mv tmp ${i}
 		bedtools intersect -nonamecheck -a ${base}_9bp_duplicates.bed -b ${blacklist} -v > tmp && mv tmp ${base}_9bp_duplicates.bed
 	else
-		echo "No blacklist is avaliable for ${sp}, skip filtering!"
+		echo "No blacklist is available for ${sp}, skip filtering!"
 	fi
 
 	#Handle on cut sites file
