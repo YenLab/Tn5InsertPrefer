@@ -3,6 +3,11 @@
 #=========================================================================================
 # Correct genome-wide Tn5 bias using seqOutBias
 #=========================================================================================
+#Since the Tn5 can recognize a total 19bp region, we use --kmer-size=19,
+#The cut sites is 5bp offset the 19bp regions, so we use --plus-offset=5 --minus-offset=5
+#The mask scheme is slightly adapted from (Martins et al., 2017).
+#After correction, we shifted the read position to count Tn5 insertion center following (Buenrostro et al., 2013)
+#The read length was used to calculate genome-wide mappability, 36 generally perform well (Derrien et al., 2012).
 plus_mask=NXNXXXCXXNNXNNNXXN
 minus_mask=NXXNNNXNNXXCXXXNXN
 name=Mouse_ESC_rep1_ATACseq_2017Gary.filtered.dedup
@@ -12,11 +17,15 @@ source /public/home/zhy/Tn5_bias/scripts/0.utilities.sh && Configuration_info mm
 samtools view -bh -F 20 ${name}.bam > ${name}_plus.bam
 samtools view -bh -f 0x10 ${name}.bam > ${name}_minus.bam
 
-seqOutBias ${FASTA_FILE} ${name}_plus.bam --kmer-mask ${plus_mask} --bw=${name}_plus_${plus_mask}-mer.bigWig --shift-counts --read-size=51
-seqOutBias ${FASTA_FILE} ${name}_minus.bam --kmer-mask ${minus_mask} --bw=${name}_minus_${minus_mask}-mer.bigWig --shift-counts --read-size=51
+seqOutBias ${FASTA_FILE} ${name}_plus.bam --kmer-mask ${plus_mask} --bw=${name}_plus_${plus_mask}-mer.bigWig \
+--read-size=51 --kmer-size=19 --plus-offset=5 --minus-offset=5 --custom-shift=4,5
+seqOutBias ${FASTA_FILE} ${name}_minus.bam --kmer-mask ${minus_mask} --bw=${name}_minus_${minus_mask}-mer.bigWig \
+--read-size=51 --kmer-size=19 --plus-offset=5 --minus-offset=5 --custom-shift=4,5
 
-seqOutBias ${FASTA_FILE} ${name}_minus.bam --no-scale --bw=${name}_no_scale_minus.bigWig --shift-counts --read-size=51
-seqOutBias ${FASTA_FILE} ${name}_plus.bam --no-scale --bw=${name}_no_scale_plus.bigWig --shift-counts --read-size=51
+seqOutBias ${FASTA_FILE} ${name}_minus.bam --no-scale --bw=${name}_no_scale_minus.bigWig \
+--read-size=51 --kmer-size=19 --plus-offset=5 --minus-offset=5 --custom-shift=4,5
+seqOutBias ${FASTA_FILE} ${name}_plus.bam --no-scale --bw=${name}_no_scale_plus.bigWig \
+--read-size=51 --kmer-size=19 --plus-offset=5 --minus-offset=5 --custom-shift=4,5
 
 bigWigMerge ${name}_plus_${plus_mask}-mer.bigWig ${name}_minus_${minus_mask}-mer.bigWig ${name}_${plus_mask}_${minus_mask}_merged.bedGraph
 bigWigMerge ${name}_no_scale_plus.bigWig ${name}_no_scale_minus.bigWig ${name}_no_scale_merged.bedGraph

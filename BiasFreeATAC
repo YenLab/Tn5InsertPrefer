@@ -167,16 +167,17 @@ echo "Step9. Correcting Tn5 bias using nucleotide dependency information ......"
 #The read length was used to calculate genome-wide mappability, 36 generally perform well (Derrien et al., 2012).
 ReadLen=36
 #Returned uncorrected ATAC-seq signals
-seqOutBias ${FASTA_FILE} ${BAM} --skip-bed --read-size=${ReadLen} --kmer-size=19 --plus-offset=5 --minus-offset=5 \
---strand-specific --custom-shift=4,5 --no-scale --bw=${FILE_PREFIX}_uncorrected.bigWig 
+#For uncorrected signals, it's meanless to specific kmer
+seqOutBias ${FASTA_FILE} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,5 \
+--no-scale --bw=${FILE_PREFIX}_uncorrected.bigWig 
 
 bigWigToBedGraph ${FILE_PREFIX}_uncorrected.bigWig /dev/stdout \
 | grep "^chr" | sort --parallel=${RUN_THREASHOLD} -k1,1 -k2,2n > ${FILE_PREFIX}_uncorrected.bedGraph
 
 #Returned corrected ATAC-seq signals
 kmer_mask=XNXXXCXXNNXNNNXXNNX
-seqOutBias ${FASTA_FILE} ${BAM} --skip-bed --read-size=${ReadLen} --kmer-size=19 --plus-offset=5 --minus-offset=5 \
---strand-specific --custom-shift=4,5 --kmer-mask ${kmer_mask} --bw=${FILE_PREFIX}_corrected.bigWig 
+seqOutBias ${FASTA_FILE} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,5 \
+--kmer-size=19 --plus-offset=5 --minus-offset=5 --kmer-mask ${kmer_mask} --bw=${FILE_PREFIX}_corrected.bigWig 
 
 bigWigToBedGraph ${FILE_PREFIX}_corrected.bigWig /dev/stdout \
 | grep "^chr" | sort --parallel=${RUN_THREASHOLD} -k1,1 -k2,2n > ${FILE_PREFIX}_corrected.bedGraph
