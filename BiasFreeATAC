@@ -146,7 +146,7 @@ __EOF__
 	
 	samtools index -@ ${RUN_THREASHOLD} ${FILE_PREFIX}.InsertSites.bam
 
-	[ ! -d ${WDIR}/metrics ] && mkdir -p ${WDIR}/metrics
+	[ ! -d ./metrics ] && mkdir -p ./metrics
 	mv *zip *html *insertSizes.txt *insertSizes.pdf *alignMetrics.txt *.flagstat.qc *deduplicate.qc ./metrics
 fi
 
@@ -160,24 +160,32 @@ else
 fi
 
 echo "Step9. Correcting Tn5 bias using nucleotide dependency information ......"
-#Since the Tn5 can recognize a total 19bp region, we use --kmer-size=19,
-#The cut sites is 5bp offset the 19bp regions, so we use --plus-offset=5 --minus-offset=5
-#The mask scheme is slightly adapted from (Martins et al., 2017).
-#After correction, we shifted the read position to count Tn5 insertion center following (Buenrostro et al., 2013)
+#The mask scheme is slightly adapted from (Martins et al., 2017). After correction, we shifted the read position 
+#to count Tn5 insertion center following (Buenrostro et al., 2013)
 #The read length was used to calculate genome-wide mappability, 36 generally perform well (Derrien et al., 2012).
+kmer_mask=XNXXXCXXNNXNNNXXNNX
 ReadLen=36
-#Returned uncorrected ATAC-seq signals
-#For uncorrected signals, it's meanless to specific kmer
-seqOutBias ${FASTA_FILE} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,5 \
---no-scale --bw=${FILE_PREFIX}_uncorrected.bigWig 
+if [[ -n ${Tallymer} ]]; then
+	#Returned uncorrected ATAC-seq signals
+	#For uncorrected signals, it's meanless to specific kmer, since its information not used.
+	seqOutBias ${FASTA_FILE} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,5 \
+	--no-scale --bw=${FILE_PREFIX}_uncorrected.bigWig --tallymer=${Tallymer}
+	
+	#Returned corrected ATAC-seq signals
+	seqOutBias ${FASTA_FILE} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,5 \
+	--kmer-mask ${kmer_mask} --bw=${FILE_PREFIX}_corrected.bigWig --tallymer=${Tallymer}
+else
+	#Returned uncorrected ATAC-seq signals
+	seqOutBias ${FASTA_FILE} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,5 \
+	--no-scale --bw=${FILE_PREFIX}_uncorrected.bigWig 
+	
+	#Returned corrected ATAC-seq signals
+	seqOutBias ${FASTA_FILE} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,5 \
+	--kmer-mask ${kmer_mask} --bw=${FILE_PREFIX}_corrected.bigWig 
+fi
 
 bigWigToBedGraph ${FILE_PREFIX}_uncorrected.bigWig /dev/stdout \
 | grep "^chr" | sort --parallel=${RUN_THREASHOLD} -k1,1 -k2,2n > ${FILE_PREFIX}_uncorrected.bedGraph
-
-#Returned corrected ATAC-seq signals
-kmer_mask=XNXXXCXXNNXNNNXXNNX
-seqOutBias ${FASTA_FILE} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,5 \
---kmer-size=19 --plus-offset=5 --minus-offset=5 --kmer-mask ${kmer_mask} --bw=${FILE_PREFIX}_corrected.bigWig 
 
 bigWigToBedGraph ${FILE_PREFIX}_corrected.bigWig /dev/stdout \
 | grep "^chr" | sort --parallel=${RUN_THREASHOLD} -k1,1 -k2,2n > ${FILE_PREFIX}_corrected.bedGraph

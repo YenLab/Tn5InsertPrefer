@@ -69,6 +69,8 @@ Usage: BiasFreeATAC.sh [options]
 
 `-b` You can also provide a bam file to skip all preprocessing steps.
 
+``
+
 `-i` The location of bowtie index for mapping
 
 `-g` Chromosome size. You can obtain it from:

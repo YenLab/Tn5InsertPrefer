@@ -18,14 +18,14 @@ samtools view -bh -F 20 ${name}.bam > ${name}_plus.bam
 samtools view -bh -f 0x10 ${name}.bam > ${name}_minus.bam
 
 seqOutBias ${FASTA_FILE} ${name}_plus.bam --kmer-mask ${plus_mask} --bw=${name}_plus_${plus_mask}-mer.bigWig \
---read-size=51 --kmer-size=19 --plus-offset=5 --minus-offset=5 --custom-shift=4,5
+--read-size=51 --custom-shift=4,5
 seqOutBias ${FASTA_FILE} ${name}_minus.bam --kmer-mask ${minus_mask} --bw=${name}_minus_${minus_mask}-mer.bigWig \
---read-size=51 --kmer-size=19 --plus-offset=5 --minus-offset=5 --custom-shift=4,5
+--read-size=51 -custom-shift=4,5
 
 seqOutBias ${FASTA_FILE} ${name}_minus.bam --no-scale --bw=${name}_no_scale_minus.bigWig \
---read-size=51 --kmer-size=19 --plus-offset=5 --minus-offset=5 --custom-shift=4,5
+--read-size=51  --custom-shift=4,5
 seqOutBias ${FASTA_FILE} ${name}_plus.bam --no-scale --bw=${name}_no_scale_plus.bigWig \
---read-size=51 --kmer-size=19 --plus-offset=5 --minus-offset=5 --custom-shift=4,5
+--read-size=51 --custom-shift=4,5
 
 bigWigMerge ${name}_plus_${plus_mask}-mer.bigWig ${name}_minus_${minus_mask}-mer.bigWig ${name}_${plus_mask}_${minus_mask}_merged.bedGraph
 bigWigMerge ${name}_no_scale_plus.bigWig ${name}_no_scale_minus.bigWig ${name}_no_scale_merged.bedGraph
@@ -91,3 +91,34 @@ do
 	giggle search -i ${giggleindex} -q ${base}_equal.bed.gz -s -g ${GENOME_SIZE_NUM} > ${base}_equal_giggle.tsv 
 	giggle search -i ${giggleindex} -q ${i} -s -g ${GENOME_SIZE_NUM} > ${base}_TFs_giggle.tsv 
 done
+
+#=========================================================================================
+# Pre-creat files for seqOutBias
+#=========================================================================================
+for i in mm10 hg38 dm6 danRer11 tair10 ce11 
+do
+	mkdir ${i} && cd ${i}
+	source /public/home/zhy/Tn5_bias/scripts/0.utilities.sh && Configuration_info ${i}
+
+	#1. Maked gtTxt 
+	seqOutBias tallymer ${FASTA_FILE} 36
+
+	faspre=`basename ${FASTA_FILE} .fa`
+	#2. Get TBL file
+	nohup seqOutBias seqtable ${FASTA_FILE} --tallymer=${faspre}.tal_36.gtTxt.gz --kmer-size=19 --plus-offset=5 --minus-offset=5 --read-size=36 &
+	nohup seqOutBias seqtable ${FASTA_FILE} --tallymer=${faspre}.tal_36.gtTxt.gz --kmer-size=4 --plus-offset=2 --minus-offset=2 --read-size=36 &
+	nohup seqOutBias seqtable ${FASTA_FILE} --tallymer=${faspre}.tal_36.gtTxt.gz --kmer-mask=XNXXXCXXNNXNNNXXNNX --read-size=36 &
+	cd ../
+done
+
+bash BiasFreeATAC \
+-r ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Mouse_ESC_ATACseq_R1.fastq.gz \
+-m Bowtie2 -i ~/Genomes_info/Mus_musculus/bowtie2_index/mm10_index \
+-g ~/Genomes_info/Mus_musculus/mm10.chrom.sizes \
+-f ~/Genomes_info/Mus_musculus/Mus_musculus.GRCm38.dna.primary_assembly_chrM.fa \
+-p 30 -o test1
+
+bash BiasFreeATAC -r ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Mouse_ESC_ATACseq_R1.fastq.gz \
+-t ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Mus_musculus.GRCm38.dna.primary_assembly_chrM.tal_36.gtTxt.gz \
+-m Bowtie2 -i ~/Genomes_info/Mus_musculus/bowtie2_index/mm10_index -g ~/Genomes_info/Mus_musculus/mm10.chrom.sizes \
+-f ~/Genomes_info/Mus_musculus/Mus_musculus.GRCm38.dna.primary_assembly_chrM.fa -p 30 -o ./test1
