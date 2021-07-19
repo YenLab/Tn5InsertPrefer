@@ -53,7 +53,8 @@ cargo build --release
 ```bash
 Usage: BiasFreeATAC.sh [options]
 
--r <string>             ATAC-seq Read1 fastq file (_R1.fastq.gz)
+-r <string>             If start from raw fastq file, please provide Read1 (_R1.fastq.gz) with this parameter.
+-b <string>             If start from mapped bam file, please provide with this parameter and you can miss the -m/-i parameter
 -m <string>             Indicate the mapper you wish to use (Bowtie2/BWA)
 -i <string>             Location of mapping index
 -g <string>             Genome size for each chromosome
@@ -65,6 +66,8 @@ Usage: BiasFreeATAC.sh [options]
 ```
 
 `-r` The Read1 of raw fastq file. In order to unify the pipeline, we suggest you name the file following this format: `Sample_R1.fastq.gz` and `Sample_R2.fastq.gz`.
+
+`-b` You can also provide a bam file to skip all preprocessing steps.
 
 `-i` The location of bowtie index for mapping
 
