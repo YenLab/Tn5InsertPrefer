@@ -17,15 +17,11 @@ source /public/home/zhy/Tn5_bias/scripts/0.utilities.sh && Configuration_info mm
 samtools view -bh -F 20 ${name}.bam > ${name}_plus.bam
 samtools view -bh -f 0x10 ${name}.bam > ${name}_minus.bam
 
-seqOutBias ${FASTA_FILE} ${name}_plus.bam --kmer-mask ${plus_mask} --bw=${name}_plus_${plus_mask}-mer.bigWig \
---read-size=51 --custom-shift=4,5
-seqOutBias ${FASTA_FILE} ${name}_minus.bam --kmer-mask ${minus_mask} --bw=${name}_minus_${minus_mask}-mer.bigWig \
---read-size=51 -custom-shift=4,5
+seqOutBias ${FASTA_FILE} ${name}_plus.bam --kmer-mask ${plus_mask} --bw=${name}_plus_${plus_mask}-mer.bigWig --shift-counts --read-size=51
+seqOutBias ${FASTA_FILE} ${name}_minus.bam --kmer-mask ${minus_mask} --bw=${name}_minus_${minus_mask}-mer.bigWig --shift-counts --read-size=51
 
-seqOutBias ${FASTA_FILE} ${name}_minus.bam --no-scale --bw=${name}_no_scale_minus.bigWig \
---read-size=51  --custom-shift=4,5
-seqOutBias ${FASTA_FILE} ${name}_plus.bam --no-scale --bw=${name}_no_scale_plus.bigWig \
---read-size=51 --custom-shift=4,5
+seqOutBias ${FASTA_FILE} ${name}_minus.bam --no-scale --bw=${name}_no_scale_minus.bigWig --shift-counts --read-size=51
+seqOutBias ${FASTA_FILE} ${name}_plus.bam --no-scale --bw=${name}_no_scale_plus.bigWig --shift-counts --read-size=51
 
 bigWigMerge ${name}_plus_${plus_mask}-mer.bigWig ${name}_minus_${minus_mask}-mer.bigWig ${name}_${plus_mask}_${minus_mask}_merged.bedGraph
 bigWigMerge ${name}_no_scale_plus.bigWig ${name}_no_scale_minus.bigWig ${name}_no_scale_merged.bedGraph
@@ -83,13 +79,19 @@ done
 giggle index -i "TFs_all/*.gz" -o TFs_all_index -f -s
 
 #Do giggle searching
+source /public/home/zhy/Tn5_bias/scripts/0.utilities.sh && Configuration_info mm10
 for i in *bed.gz
 do
 	base=`basename ${i} .bed.gz`
 	giggleindex=/public/home/zhy/Genomes_info/Mus_musculus/Cistrome/ESC_factors/TFs_all_index/
-	zcat ${i} | shuf | head -400 | sort -k1,1 -k2,2n | bgzip -c > ${base}_equal.bed.gz
-	giggle search -i ${giggleindex} -q ${base}_equal.bed.gz -s -g ${GENOME_SIZE_NUM} > ${base}_equal_giggle.tsv 
-	giggle search -i ${giggleindex} -q ${i} -s -g ${GENOME_SIZE_NUM} > ${base}_TFs_giggle.tsv 
+	zcat ${i} | shuf | head -4000 | sort -k1,1 -k2,2n | bgzip -c > ${base}_equal.bed.gz
+
+	nohup giggle search -i ${giggleindex} -q ${base}_equal.bed.gz -s -g ${GENOME_SIZE_NUM} > ${base}_equal_giggle.tsv  &
+	nohup giggle search -i ${giggleindex} -q ${i} -s -g ${GENOME_SIZE_NUM} > ${base}_TFs_giggle.tsv  &
+
+	giggleindex=/public/home/zhy/Genomes_info/Mus_musculus/Cistrome/ESC_factors/TFs_unique_index/
+	nohup giggle search -i ${giggleindex} -q ${base}_equal.bed.gz -s -g ${GENOME_SIZE_NUM} > ${base}_equal_unique_giggle.tsv  &
+	nohup giggle search -i ${giggleindex} -q ${i} -s -g ${GENOME_SIZE_NUM} > ${base}_TFs_unique_giggle.tsv  &
 done
 
 #=========================================================================================
@@ -97,7 +99,8 @@ done
 #=========================================================================================
 for i in mm10 hg38 dm6 danRer11 tair10 ce11 
 do
-	mkdir ${i} && cd ${i}
+	#mkdir ${i} && 
+	cd ${i}
 	source /public/home/zhy/Tn5_bias/scripts/0.utilities.sh && Configuration_info ${i}
 
 	#1. Maked gtTxt 
@@ -105,20 +108,36 @@ do
 
 	faspre=`basename ${FASTA_FILE} .fa`
 	#2. Get TBL file
-	nohup seqOutBias seqtable ${FASTA_FILE} --tallymer=${faspre}.tal_36.gtTxt.gz --kmer-size=19 --plus-offset=5 --minus-offset=5 --read-size=36 &
-	nohup seqOutBias seqtable ${FASTA_FILE} --tallymer=${faspre}.tal_36.gtTxt.gz --kmer-size=4 --plus-offset=2 --minus-offset=2 --read-size=36 &
-	nohup seqOutBias seqtable ${FASTA_FILE} --tallymer=${faspre}.tal_36.gtTxt.gz --kmer-mask=XNXXXCXXNNXNNNXXNNX --read-size=36 &
+	BAM=../Mouse_ESC_ATACseq.filtered.dedup.bam
+	nohup seqOutBias ${FASTA_FILE} ${BAM} --skip-bed --read-size=36 --strand-specific --custom-shift=4,5 \
+	--kmer-mask XNXXXCXXNNXNNNXXNNX --bw=${FILE_PREFIX}_corrected.bigWig --tallymer=${faspre}.tal_36.gtTxt.gz &
 	cd ../
 done
 
-bash BiasFreeATAC \
--r ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Mouse_ESC_ATACseq_R1.fastq.gz \
--m Bowtie2 -i ~/Genomes_info/Mus_musculus/bowtie2_index/mm10_index \
+./BiasFreeATAC \
+-r ./Mouse_ESC_ATACseq_R1.fastq.gz \
+-t ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Tallymer \
+-m Bowtie2 \
+-i ~/Genomes_info/Mus_musculus/bowtie2_index/mm10_index \
 -g ~/Genomes_info/Mus_musculus/mm10.chrom.sizes \
 -f ~/Genomes_info/Mus_musculus/Mus_musculus.GRCm38.dna.primary_assembly_chrM.fa \
--p 30 -o test1
+-l ~/Genomes_info/Mus_musculus/mm10-blacklist.v2.bed \
+-p 30 \
+-o ./test5
 
-bash BiasFreeATAC -r ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Mouse_ESC_ATACseq_R1.fastq.gz \
--t ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Mus_musculus.GRCm38.dna.primary_assembly_chrM.tal_36.gtTxt.gz \
--m Bowtie2 -i ~/Genomes_info/Mus_musculus/bowtie2_index/mm10_index -g ~/Genomes_info/Mus_musculus/mm10.chrom.sizes \
--f ~/Genomes_info/Mus_musculus/Mus_musculus.GRCm38.dna.primary_assembly_chrM.fa -p 30 -o ./test1
+nohup ./BiasFreeATAC \
+-r ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Mouse_ZHBTC4_rep1_ATACseq_2017King_R1.fastq.gz \
+-t ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Tallymer \
+-m Bowtie2 \
+-i ~/Genomes_info/Mus_musculus/bowtie2_index/mm10_index \
+-g ~/Genomes_info/Mus_musculus/mm10.chrom.sizes \
+-f ~/Genomes_info/Mus_musculus/Mus_musculus.GRCm38.dna.primary_assembly_chrM.fa \
+-l ~/Genomes_info/Mus_musculus/mm10-blacklist.v2.bed \
+-p 30 \
+-o ./ESC &> ESC_BiasFreeATAC.log &
+
+nohup ./BiasFreeATAC -b ESC/Mouse_ZHBTC4_rep1_ATACseq_2017King.filtered.dedup.bam \
+-t ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Tallymer -m Bowtie2 \
+-i ~/Genomes_info/Mus_musculus/bowtie2_index/mm10_index -g ~/Genomes_info/Mus_musculus/mm10.chrom.sizes \
+-f ~/Genomes_info/Mus_musculus/Mus_musculus.GRCm38.dna.primary_assembly_chrM.fa \
+-l ~/Genomes_info/Mus_musculus/mm10-blacklist.v2.bed -p 30 -o ./ESC &>> ESC_BiasFreeATAC.log &
