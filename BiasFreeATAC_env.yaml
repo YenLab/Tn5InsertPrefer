@@ -9,7 +9,7 @@ dependencies:
   - fastqc
   - trimmomatic
   - pigz
-  - bowtie2
+  - bowtie2==2.2.5
   - bwa
   - samtools
   - bedtools

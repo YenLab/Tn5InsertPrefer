@@ -47,7 +47,7 @@ source activate BiasFreeATAC_env
 chmod +x BiasFreeATAC
 ```
 
-You can find the install instructions of bias correction package seqOutBias (Martins *et al., NAR*, 2017) from its [github repository](https://github.com/guertinlab/seqOutBias) for specific version; or use followed command. Please note seqOutBias is on Rust, the compiler and other dependencies were also installed above using conda, so, you need only to compile seqOutBias:
+You can find the install instructions of bias correction package seqOutBias (Martins *et al., NAR*, 2017) from 1) Use our pre-compiled version 1.3.0; 2). its [github repository](https://github.com/guertinlab/seqOutBias) for specific version (>=1.3.0); 2) use followed command. Please note seqOutBias is on Rust, the compiler and other dependencies were also installed above using conda, so, you need only to compile seqOutBias:
 
 ```bash
 #Install seqOutBias
