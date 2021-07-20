@@ -3,6 +3,7 @@ name: BiasFreeATAC_env
 channels:
   - bioconda
   - conda-forge
+  - pkgw-forge
 
 dependencies:
   - fastqc

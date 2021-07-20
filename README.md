@@ -63,7 +63,7 @@ export PATH=$PATH:$(realpath ./target/release)
 
 BiasFreeATAC accept paired end (PE) `raw fastq` file for *de novo* preprocessing; or a `bam` file that subjected to the bias correction procedure. Provide input files with relative/absolute as you like, BiasFreeATAC works.
 
-BiasFreeATAC take ~3 hour to run on 65M PE reads for mouse ESC.
+BiasFreeATAC take ~3 hour to run on 65M PE reads for mouse ESC, using 30 CPUs.
 
 ```bash
 Usage: ./BiasFreeATAC [options]
