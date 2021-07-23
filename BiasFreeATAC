@@ -17,6 +17,7 @@ usage() {
 	echo -e ""
 	echo -e "-r <string>		If start from raw fastq file, please provide Read1 (_R1.fastq.gz) with this parameter."
 	echo -e "-b <string>		If start from mapped bam file, please provide with this parameter and you can miss the -r/-m/-i parameter."
+	echo -e "-T <string>		Indicate which trim package you wish to use (trimmomatic/fastp)"		
 	echo -e "-m <string>		Indicate which mapper you wish to use (Bowtie2/BWA)"	
 	echo -e "-i <string>		Location of mapping index corresponding to the mapper you provided (-m)."
 	echo -e "-g <string>		Genome size for each chromosome."
@@ -33,11 +34,14 @@ Tallymer=""
 FqFile=""
 BamFile=""
 blacklist=""
+Trimmer="trimmomatic"
+MAPPER="Bowtie2"
 
-while getopts ":r:b:m:i:g:f:t:l:p:o:" op; do
+while getopts ":r:b:T:m:i:g:f:t:l:p:o:" op; do
 	case $op in
 		r) FqFile=${OPTARG} ;;
 		b) BamFile=${OPTARG} ;;
+		T) Trimmer=${OPTARG} ;;
 		m) MAPPER=${OPTARG} ;;
 		i) MapperIndex=${OPTARG} ;;
 		g) GenomeSize=${OPTARG} ;;
@@ -83,7 +87,6 @@ if [[ -n ${FqFile} ]]; then
 	fastqc --threads ${THREASHOLD} --quiet --outdir ./ ${RawFqPath}/${SamplePrefix}_R1.fastq.gz ${RawFqPath}/${SamplePrefix}_R2.fastq.gz 
 	
 	echo -e "\nStep2. Trimming Tn5 adapters ......"
-	
 #Output the Tn5 adapter sequence
 cat > NexteraPE-PE.fa <<__EOF__
 >PrefixNX/1
@@ -98,16 +101,26 @@ CTGTCTCTTATACACATCTGACGCTGCCGACGA
 GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
 >Trans2_rc
 CTGTCTCTTATACACATCTCCGAGCCCACGAGAC
+>polyG
+GGGGGGGGGGGGGGG
 __EOF__
 
-	trimmomatic PE -threads ${THREASHOLD} -phred33 \
-	${RawFqPath}/${SamplePrefix}_R1.fastq.gz ${RawFqPath}/${SamplePrefix}_R2.fastq.gz \
-	${SamplePrefix}_R1_trimmed.fastq ${SamplePrefix}_R1_unpaired.fastq \
-	${SamplePrefix}_R2_trimmed.fastq ${SamplePrefix}_R2_unpaired.fastq \
-	ILLUMINACLIP:NexteraPE-PE.fa:2:30:10:1:true MINLEN:20 
+	if [[ ${Trimmer} == "trimmomatic" ]];then
+		trimmomatic PE -threads ${THREASHOLD} -phred33 \
+		${RawFqPath}/${SamplePrefix}_R1.fastq.gz ${RawFqPath}/${SamplePrefix}_R2.fastq.gz \
+		${SamplePrefix}_R1_trimmed.fastq ${SamplePrefix}_R1_unpaired.fastq ${SamplePrefix}_R2_trimmed.fastq ${SamplePrefix}_R2_unpaired.fastq \
+		ILLUMINACLIP:NexteraPE-PE.fa:2:30:10:1:true MINLEN:20 
 
-	rm -f ${SamplePrefix}_R1_unpaired.fastq ${SamplePrefix}_R2_unpaired.fastq NexteraPE-PE.fa
-	pigz -p ${THREASHOLD} ${SamplePrefix}_R1_trimmed.fastq ${SamplePrefix}_R2_trimmed.fastq
+		rm -f ${SamplePrefix}_R1_unpaired.fastq ${SamplePrefix}_R2_unpaired.fastq NexteraPE-PE.fa
+		pigz -p ${THREASHOLD} ${SamplePrefix}_R1_trimmed.fastq ${SamplePrefix}_R2_trimmed.fastq
+
+	elif [[ ${Trimmer} == "fastp" ]];then
+		#fastp has the feature to remove ployG that frequently occur in Nova sequencer
+		fastp --in1 ${RawFqPath}/${SamplePrefix}_R1.fastq.gz --in2 ${RawFqPath}/${SamplePrefix}_R2.fastq.gz \
+		--out1 ${SamplePrefix}_R1_trimmed.fastq.gz --out2 ${SamplePrefix}_R2_trimmed.fastq.gz \
+		--thread ${THREASHOLD} --trim_poly_g 10 -adapter_fasta NexteraPE-PE.fa --length_required 20 
+		rm -f NexteraPE-PE.fa
+	fi
 	
 	echo -e "\nStep3. Checking quality of trimmed data ......"
 	fastqc --threads ${THREASHOLD} --quiet --outdir ./ ${SamplePrefix}_R1_trimmed.fastq.gz ${SamplePrefix}_R2_trimmed.fastq.gz
