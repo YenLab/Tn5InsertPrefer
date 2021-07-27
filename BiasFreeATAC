@@ -17,8 +17,8 @@ usage() {
 	echo -e ""
 	echo -e "-r <string>		If start from raw fastq file, please provide Read1 (_R1.fastq.gz) with this parameter."
 	echo -e "-b <string>		If start from mapped bam file, please provide with this parameter and you can miss the -r/-m/-i parameter."
-	echo -e "-T <string>		Indicate which trim package you wish to use (trimmomatic/fastp)"		
-	echo -e "-m <string>		Indicate which mapper you wish to use (Bowtie2/BWA)"	
+	echo -e "-T <string>		Indicate which trim package you wish to use (trimmomatic/fastp)[default:trimmomatic]"		
+	echo -e "-m <string>		Indicate which mapper you wish to use (Bowtie2/BWA)[default:Bowtie2]"	
 	echo -e "-i <string>		Location of mapping index corresponding to the mapper you provided (-m)."
 	echo -e "-g <string>		Genome size for each chromosome."
 	echo -e "-f <string>		Genome reference fasta file."
@@ -209,12 +209,12 @@ if [[ -n ${Tallymer} ]]; then
 	fi
 
 	#Returned corrected ATAC-seq signals
-	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,5 \
+	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,-5 \
 	--kmer-size=18 --plus-offset=5 --minus-offset=5 --kmer-mask ${kmer_mask} \
 	--bw=${SamplePrefix}_corrected.bigWig --tallymer=${faspre}.tal_36.gtTxt.gz
 
 	#Returned uncorrected ATAC-seq signals
-	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,5 \
+	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,-5 \
 	--kmer-size=18 --plus-offset=5 --minus-offset=5 --no-scale \
 	--bw=${SamplePrefix}_uncorrected.bigWig --tallymer=${faspre}.tal_36.gtTxt.gz
 
@@ -222,11 +222,11 @@ if [[ -n ${Tallymer} ]]; then
 else
 	#If not provided the tallymer directory (-t), BiasFreeATAC create use long time to create this (5 hours for mouse)!.
 	#Returned corrected ATAC-seq signals
-	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,5 \
+	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,-5 \
 	--kmer-size=18 --plus-offset=5 --minus-offset=5 --kmer-mask ${kmer_mask} --bw=${SamplePrefix}_corrected.bigWig 
 
 	#Returned uncorrected ATAC-seq signals
-	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,5 \
+	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,-5 \
 	--kmer-size=18 --plus-offset=5 --minus-offset=5 --no-scale --bw=${SamplePrefix}_uncorrected.bigWig 
 fi
 

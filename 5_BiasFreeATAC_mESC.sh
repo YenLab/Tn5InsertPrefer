@@ -114,6 +114,11 @@ do
 	cd ../
 done
 
+#We have splited the tbl file for huamn and mouse, and uploaded into ZENODO
+
+split -b 4G -d Homo_sapiens.GRCh38.dna.primary_assembly_chrM_36.18.5.5.tbl Homo_sapiens.GRCh38.dna.primary_assembly_chrM_36.18.5.5.tbl_Part 
+split -b 4G -d Mus_musculus.GRCm38.dna.primary_assembly_chrM_36.18.5.5.tbl Mus_musculus.GRCm38.dna.primary_assembly_chrM_36.18.5.5.tbl_Part 
+
 ./BiasFreeATAC \
 -r ./Mouse_ESC_ATACseq_R1.fastq.gz \
 -t ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Tallymer \
@@ -125,19 +130,3 @@ done
 -p 30 \
 -o ./test5
 
-nohup ./BiasFreeATAC \
--r ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Mouse_ZHBTC4_rep1_ATACseq_2017King_R1.fastq.gz \
--t ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Tallymer \
--m Bowtie2 \
--i ~/Genomes_info/Mus_musculus/bowtie2_index/mm10_index \
--g ~/Genomes_info/Mus_musculus/mm10.chrom.sizes \
--f ~/Genomes_info/Mus_musculus/Mus_musculus.GRCm38.dna.primary_assembly_chrM.fa \
--l ~/Genomes_info/Mus_musculus/mm10-blacklist.v2.bed \
--p 30 \
--o ./ESC &> ESC_BiasFreeATAC.log &
-
-nohup ./BiasFreeATAC -b ESC/Mouse_ZHBTC4_rep1_ATACseq_2017King.filtered.dedup.bam \
--t ~/Tn5_bias/pre-processing/PeakCalling/ESC/testpipeline/Tallymer -m Bowtie2 \
--i ~/Genomes_info/Mus_musculus/bowtie2_index/mm10_index -g ~/Genomes_info/Mus_musculus/mm10.chrom.sizes \
--f ~/Genomes_info/Mus_musculus/Mus_musculus.GRCm38.dna.primary_assembly_chrM.fa \
--l ~/Genomes_info/Mus_musculus/mm10-blacklist.v2.bed -p 30 -o ./ESC &>> ESC_BiasFreeATAC.log &
