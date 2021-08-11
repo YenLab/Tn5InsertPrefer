@@ -100,7 +100,7 @@ Usage: ./BiasFreeATAC [options]
 - ${GenomeFastaPrefix}.tal_36.gtTxt.gz
 - ${GenomeFastaPrefix}_36.18.5.5.tbl
 
-You can find our pre-calculated files for `mm10` `hg38` `dm6` `ce11` `danRer11` `tair10` in [ZENODO](https://zenodo.org/record/5115506#). Note, you need to rename the ${GenomeFastaPrefix} same as your genome fasta file prefix as that in `-f`.
+You can find our pre-calculated files for `mm10` `hg38` `dm6` `ce11` `danRer11` `tair10` in [ZENODO](https://zenodo.org/record/5115506#.YRIwpGgzaUk). Note, you need to rename the ${GenomeFastaPrefix} same as your genome fasta file prefix as that in `-f`.
 
 Otherwise, you can skip this parameter and let BiasFreeATAC create this for you. Hope you will be patient, because for mouse (mm10), this step takes ~5h.
 
