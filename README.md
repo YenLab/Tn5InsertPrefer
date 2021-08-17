@@ -28,7 +28,6 @@ To promote bias-corrected ATAC-seq analysis, we hence developed a pipeline for t
   
 - Scripts in the StandaloneScript folder was called by pipelines.
 
-- BiasFreeATAC pipeline, illustrated below.
 
 ## BiasFreeATAC: A Tn5-bias corrected ATAC-seq pipeline
 
