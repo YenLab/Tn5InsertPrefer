@@ -16,7 +16,7 @@ To promote bias-corrected ATAC-seq analysis, we hence developed a pipeline for t
 
 
 
-<img align="left" width=700 src="https://github.com/YenLab/Tn5InsertPrefer/blob/main/StandaloneScripts/GraphicalAbstract.png">  
+<img align="left" width=300 src="https://github.com/YenLab/Tn5InsertPrefer/blob/main/StandaloneScripts/GraphicalAbstract.png">  
 
 
 
