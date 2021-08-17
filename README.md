@@ -14,7 +14,17 @@ Here we systematically explored Tn5 insertion characteristics across several mod
 
 To promote bias-corrected ATAC-seq analysis, we hence developed a pipeline for this purpose. Using our pipeline, we showed the bias correction would improve the overall performance of ATAC-seq peak detection. Importantly, we showed that with bias correction, many potential false-negative peaks could be recovered. By conducting a genome-wide transcription factors (TFs) enrichment analysis, we found these peaks contain abundant TFs. We propose that a comprehensive understanding and precise correction of Tn5 insertion preference could broaden the view of Tn5-assisted sequencing data. 
 
-<img align="left" width=300 src="https://github.com/YenLab/Tn5InsertPrefer/blob/main/StandaloneScripts/GraphicalAbstract.png">  
+<img align="left" width=500 src="./StandaloneScripts/GraphicalAbstract.png">  
+
+
+
+
+
+
+
+
+
+
 
 
 
