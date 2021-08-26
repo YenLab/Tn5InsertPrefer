@@ -30,7 +30,7 @@ usage() {
 }
 
 #Initiate parameters with NULL
-Tallymer=""
+Tallymer="./"
 FqFile=""
 BamFile=""
 blacklist=""
