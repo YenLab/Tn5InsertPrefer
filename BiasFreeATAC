@@ -2,7 +2,7 @@
 ##########################################################################
 #This pipeline is for ATAC-seq analysis, featured on Tn5 bias-correction.
 
-#Version 1.0
+#Version 1.1
 #Created by Houyu Zhang
 #Issue report on Hughiez047@gmail.com
 #Copyright (c) 2021 __YenLab@SKLEH__. All rights reserved.
