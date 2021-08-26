@@ -17,6 +17,6 @@ dependencies:
   - picard
   - ucsc-bigwigtobedgraph
   - macs2
-  - genometools
+  - genometools-genometools
   - rust
   - cargo
