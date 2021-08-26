@@ -22,7 +22,7 @@ usage() {
 	echo -e "-i <string>		Location of mapping index corresponding to the mapper you provided (-m)."
 	echo -e "-g <string>		Genome size for each chromosome."
 	echo -e "-f <string>		Genome reference fasta file."
-	echo -e "-t <string>		tallymer mappability file directory [optional]."
+	echo -e "-t <string>		Tallymer mappability file directory."
 	echo -e "-l <string>		Blacklist regions [optional]."
 	echo -e "-p <string>		Thresholds for parallelly run this pipeline."
 	echo -e "-o <string>		Working directory, all output files will be generated here."
@@ -34,6 +34,7 @@ Tallymer=""
 FqFile=""
 BamFile=""
 blacklist=""
+MapperIndex=""
 Trimmer="trimmomatic"
 MAPPER="Bowtie2"
 
@@ -193,43 +194,39 @@ kmer_mask=XNXXXCXXNNXNNNXXNNX
 ReadLen=36
 faspre=`basename ${GenomeFasta} .fa`
 
-if [[ -n ${Tallymer} ]]; then
-	#If you provide tallymer directory (-t), BiasFreeATAC create soft link for Tallymer and SeqTable files in working directory.
-	if [[ ! -f ${Tallymer}/${faspre}.tal_36.gtTxt.gz ]];then
-		echo "Sorry, BiasFreeATAC can't find tallymer file (${Tallymer}/${faspre}.tal_36.gtTxt.gz), please check!!!"
-		exit -1
-	else
-		ln -sf ${Tallymer}/${faspre}.tal_36.gtTxt.gz .
-	fi
+if [[ ! -f ${Tallymer}/${faspre}.tal_36.gtTxt.gz ]];then
+	#If the tallymer directory (-t) doesn't contian tallymer files, BiasFreeATAC use long time to create these files (5 hours for mouse!).
+	echo "BiasFreeATAC can't find tallymer file (${Tallymer}/${faspre}.tal_36.gtTxt.gz), but will build one de novo!!!"
+	#Returned corrected ATAC-seq signals
+	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,-5 \
+	--kmer-size=18 --plus-offset=5 --minus-offset=5 --kmer-mask ${kmer_mask} \
+	--bw=${SamplePrefix}_corrected.bigWig 
+	
+	#Returned uncorrected ATAC-seq signals
+	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,-5 \
+	--kmer-size=18 --plus-offset=5 --minus-offset=5 --no-scale \
+	--bw=${SamplePrefix}_uncorrected.bigWig
 
-	if [[ ! -f ${Tallymer}/${faspre}_36.18.5.5.tbl ]];then
-		echo "Sorry, BiasFreeATAC can't find tallymer file (${Tallymer}/${faspre}_36.18.5.5.tbl), but will build one!!!"
-	else
-		ln -sf ${Tallymer}/${faspre}_36.18.5.5.tbl .
-	fi
+	mv ${faspre}.tal_36.gtTxt.gz ${faspre}_36.18.5.5.tbl ${Tallymer}
+	rm -f ${faspre}.sft.* ${faspre}.tal_.*
+
+elif [[ -f ${Tallymer}/${faspre}.tal_36.gtTxt.gz ]];then
+	#If you provide tallymer directory (-t), BiasFreeATAC create soft link for Tallymer and SeqTable files in working directory.
+	echo "BiasFreeATAC find tallymer files (${Tallymer}/${faspre}.tal_36.gtTxt.gz), will use this for bias correction..."
+	ln -sf ${Tallymer}/${faspre}.tal_36.gtTxt.gz .
+	ln -sf ${Tallymer}/${faspre}_36.18.5.5.tbl .
 
 	#Returned corrected ATAC-seq signals
 	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,-5 \
 	--kmer-size=18 --plus-offset=5 --minus-offset=5 --kmer-mask ${kmer_mask} \
 	--bw=${SamplePrefix}_corrected.bigWig --tallymer=${faspre}.tal_36.gtTxt.gz
-
+	
 	#Returned uncorrected ATAC-seq signals
 	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,-5 \
 	--kmer-size=18 --plus-offset=5 --minus-offset=5 --no-scale \
 	--bw=${SamplePrefix}_uncorrected.bigWig --tallymer=${faspre}.tal_36.gtTxt.gz
 
 	rm -f ${faspre}.tal_36.gtTxt.gz ${faspre}_36.18.5.5.tbl
-else
-	#If not provided the tallymer directory (-t), BiasFreeATAC create use long time to create this (5 hours for mouse!).
-	echo "Tallymer file ${faspre}.tal_36.gtTxt.gz not provided through -t, BiasFreeATAC will build one..."
-	
-	#Returned corrected ATAC-seq signals
-	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,-5 \
-	--kmer-size=18 --plus-offset=5 --minus-offset=5 --kmer-mask ${kmer_mask} --bw=${SamplePrefix}_corrected.bigWig 
-
-	#Returned uncorrected ATAC-seq signals
-	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,-5 \
-	--kmer-size=18 --plus-offset=5 --minus-offset=5 --no-scale --bw=${SamplePrefix}_uncorrected.bigWig 
 fi
 
 bigWigToBedGraph ${SamplePrefix}_uncorrected.bigWig /dev/stdout \

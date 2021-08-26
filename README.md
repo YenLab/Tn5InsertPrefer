@@ -75,7 +75,7 @@ Usage: ./BiasFreeATAC [options]
 -i <string>             Location of mapping index corresponding to the mapper you provided (-m).
 -g <string>             Genome size for each chromosome.
 -f <string>             Genome reference fasta file.
--t <string>             tallymer mappability file directory [optional].
+-t <string>             Tallymer mappability file directory.
 -l <string>             Blacklist regions [optional].
 -p <string>             Thresholds for parallelly run this pipeline.
 -o <string>             Working directory, all output files will be generated here.
@@ -96,7 +96,7 @@ Usage: ./BiasFreeATAC [options]
 
 `-f` Genome sequence file in fasta format.
 
-`-t` [Optional] This directory contain two files for Tn5 bias correction:
+`-t` This directory should contain two files for Tn5 bias correction:
 
 - ${GenomeFastaPrefix}.tal_36.gtTxt.gz
 - ${GenomeFastaPrefix}_36.18.5.5.tbl
@@ -104,9 +104,9 @@ Usage: ./BiasFreeATAC [options]
 You can find our pre-calculated files for `mm10` `hg38` `dm6` `ce11` `danRer11` `tair10` in [ZENODO](https://zenodo.org/record/5115506#.YRIwpGgzaUk). Note, you need to rename the ${GenomeFastaPrefix} same as your genome fasta file prefix as that in `-f`. 
 For `mm10` and `hg38`, please use `cat *_Part0* > ${GenomeFastaPrefix}_36.18.5.5.tbl` to merge our splitted .tbl files.
 
-Otherwise, you can skip this parameter and let BiasFreeATAC create this for you. Hope you will be patient, because for mouse (mm10), this step takes ~5h.
+However, if this directory is empty, BiasFreeATAC will create tallymer files in this directory. Hope you will be patient, because this step takes ~5h for mouse (mm10). **Note, if you run BiasFreeATAC in loops for many samples, the creation only action in the first loop, since the tallymer files will be found in second loop.**
 
-`-l` [Optional] Blacklist that removed from this analysis. You can find this for `mm10` `hg38` `dm6` `ce11`  [here](https://github.com/Boyle-Lab/Blacklist).  
+`-l` [Optional] Blacklist that removed from this analysis. You can find this for `mm10` `hg38` `dm6` `ce11`  [here](https://github.com/Boyle-Lab/Blacklist).
 
 `-p` Thresholds for parallel running the pipeline.
 
@@ -128,7 +128,7 @@ Otherwise, you can skip this parameter and let BiasFreeATAC create this for you.
 
 #From bam file
 ./BiasFreeATAC \
--r ./Mouse_ESC_ATACseq.filtered.dedup.bam \
+-b ./Mouse_ESC_ATACseq.filtered.dedup.bam \
 -t ./Tallymer \
 -g ~/Genomes_info/Mus_musculus/mm10.chrom.sizes \
 -f ~/Genomes_info/Mus_musculus/Mus_musculus.GRCm38.dna.primary_assembly_chrM.fa \
