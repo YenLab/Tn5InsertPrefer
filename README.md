@@ -1,10 +1,11 @@
 # Comprehensive understanding of Tn5 insertion preference recovers expansive transcription regulatory lexicon
+[![Preprint Available](https://img.shields.io/badge/Preprint-online-green.svg)]() [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)   
 
-**Author**: Houyu Zhang
+**:writing_hand:Author**: Houyu Zhang
 
-**Email**: Hughiez047@gmail.com
+**:email:Email**: Hughiez047@gmail.com
 
-#Copyright (c) 2021 YenLab@SKLEH. All rights reserved.
+Copyright (c) 2021 YenLab@SKLEH. All rights reserved.
 
 ## Introduction
 
@@ -16,7 +17,7 @@ To promote bias-corrected ATAC-seq analysis, we hence developed a pipeline for t
 
 <img align="left" width=450 src="https://github.com/YenLab/Tn5InsertPrefer/blob/main/StandaloneScripts/GraphicalAbstract.png">  
 
-## Scripts organization
+### :file_folder:Scripts organization
 
 - Scripts head with `0_` is for general preprocessing NGS data, include
 
@@ -29,7 +30,7 @@ To promote bias-corrected ATAC-seq analysis, we hence developed a pipeline for t
 - Scripts in the StandaloneScript folder was called by pipelines.
 
 
-## BiasFreeATAC: A Tn5-bias corrected ATAC-seq pipeline
+## :hammer_and_wrench:BiasFreeATAC: A Tn5-bias corrected ATAC-seq pipeline
 
 BiasFreeATAC pipeline is composed of a bash script and configure `yaml` file, please install following these guidelines. 
 
@@ -60,7 +61,7 @@ cargo build --release
 export PATH=$(realpath ./target/release):$PATH
 ```
 
-### Usage
+### Help information:
 
 BiasFreeATAC accept paired end (PE) `raw fastq` file for *de novo* preprocessing; or a `bam` file that subjected to the bias correction procedure. Provide input files with relative/absolute path as you like, BiasFreeATAC works.
 
@@ -104,7 +105,7 @@ Usage: ./BiasFreeATAC [options]
 You can find our pre-calculated files for `mm10` `hg38` `dm6` `ce11` `danRer11` `tair10` in [ZENODO](https://zenodo.org/record/5115506#.YRIwpGgzaUk). Note, you need to rename the ${GenomeFastaPrefix} same as your genome fasta file prefix as that in `-f`. 
 For `mm10` and `hg38`, please use `cat *_Part0* > ${GenomeFastaPrefix}_36.18.5.5.tbl` to merge our splitted .tbl files.
 
-However, if this directory is empty, BiasFreeATAC will create tallymer files in this directory. Hope you will be patient, because this step takes ~5h for mouse (mm10). **Note, if you run BiasFreeATAC in loops for many samples, the creation only action in the first loop, since the tallymer files will be found in second loop.**
+However, if this directory is empty, BiasFreeATAC will create tallymer files in this directory. Hope you will be patient, because this step takes ~5h for mouse (mm10). **:notebook_with_decorative_cover:Note, if you run BiasFreeATAC in loops for many samples, the creation only action in the first loop, since the tallymer files will be found in second loop.**
 
 `-l` [Optional] Blacklist that removed from this analysis. You can find this for `mm10` `hg38` `dm6` `ce11`  [here](https://github.com/Boyle-Lab/Blacklist).
 
@@ -144,4 +145,4 @@ However, if this directory is empty, BiasFreeATAC will create tallymer files in 
 - `./_uncorrected_peaks` `./_uncorrected_peaks`: .broadPeak for Uncorrected and corrected Tn5 insertion signals by MACS2.
 - `_uncorrected_share_peaks.bed` `_uncorrected_specific_peaks.bed` `_corrected_share_peaks.bed` `_corrected_specific_peaks.bed` : Overlaps of uncorrected/corrected peaks for downstream analysis, for example, the TF-enrichment analysis for each peak set.
 
-### Citation
+## :newspaper:Citation
