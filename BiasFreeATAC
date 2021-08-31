@@ -2,7 +2,7 @@
 ##########################################################################
 #This pipeline is for ATAC-seq analysis, featured on Tn5 bias-correction.
 
-#Version 1.1
+#Version 1.2
 #Created by Houyu Zhang
 #Issue report on Hughiez047@gmail.com
 #Copyright (c) 2021 __YenLab@SKLEH__. All rights reserved.
@@ -23,7 +23,7 @@ usage() {
 	echo -e "-g <string>		Genome size for each chromosome."
 	echo -e "-f <string>		Genome reference fasta file."
 	echo -e "-t <string>		Tallymer mappability file directory."
-	echo -e "-l <string>		Blacklist regions [optional]."
+	echo -e "-l <string>		[optional] Blacklist regions."
 	echo -e "-p <string>		Thresholds for parallelly run this pipeline."
 	echo -e "-o <string>		Working directory, all output files will be generated here."
 	exit 1
@@ -55,6 +55,13 @@ while getopts ":r:b:T:m:i:g:f:t:l:p:o:" op; do
 	esac
 done
 shift $((OPTIND-1))
+
+# check necessary parameters
+if [[ -z $GenomeSize ]] || [[ -z $GenomeFasta ]] || [[ -z $Tallymer ]]; then
+	echo -e "Necessary parameters missing (GenomeSize, GenomeFasta, Tallymer), please specify clearly..."
+	usage
+	exit -1
+fi
 
 #Get absolute file path, so users can use relative/absolute as they like.
 [[ ${FqFile} != "" ]] && FqFile=`realpath ${FqFile}`
@@ -207,14 +214,21 @@ if [[ ! -f ${Tallymer}/${faspre}.tal_36.gtTxt.gz ]];then
 	--kmer-size=18 --plus-offset=5 --minus-offset=5 --no-scale \
 	--bw=${SamplePrefix}_uncorrected.bigWig
 
-	mv ${faspre}.tal_36.gtTxt.gz ${faspre}_36.18.5.5.tbl ${Tallymer}
 	rm -f ${faspre}.sft.* ${faspre}.tal_.*
+
+	#Move tallymer files is tallymer directory specified
+	if [[ ${Tallymer} != "./" ]];then
+		mv ${faspre}.tal_36.gtTxt.gz ${faspre}_36.18.5.5.tbl ${Tallymer}
+	fi
 
 elif [[ -f ${Tallymer}/${faspre}.tal_36.gtTxt.gz ]];then
 	#If you provide tallymer directory (-t), BiasFreeATAC create soft link for Tallymer and SeqTable files in working directory.
 	echo "BiasFreeATAC find tallymer files (${Tallymer}/${faspre}.tal_36.gtTxt.gz), will use this for bias correction..."
-	ln -sf ${Tallymer}/${faspre}.tal_36.gtTxt.gz .
-	ln -sf ${Tallymer}/${faspre}_36.18.5.5.tbl .
+
+	if [[ ${Tallymer} != "./" ]];then
+		ln -sf ${Tallymer}/${faspre}.tal_36.gtTxt.gz .
+		ln -sf ${Tallymer}/${faspre}_36.18.5.5.tbl .
+	fi
 
 	#Returned corrected ATAC-seq signals
 	seqOutBias ${GenomeFasta} ${BAM} --skip-bed --read-size=${ReadLen} --strand-specific --custom-shift=4,-5 \
