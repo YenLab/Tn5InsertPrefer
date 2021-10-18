@@ -129,4 +129,3 @@ split -b 4G -d Mus_musculus.GRCm38.dna.primary_assembly_chrM_36.18.5.5.tbl Mus_m
 -l ~/Genomes_info/Mus_musculus/mm10-blacklist.v2.bed \
 -p 30 \
 -o ./test5
-

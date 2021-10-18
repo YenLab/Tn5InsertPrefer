@@ -35,6 +35,3 @@ for k in sorted(sites_dict.keys()):
         ed = str(int(new[1]) + ext_right)
         out.write(new[0] + "\t"+ st + "\t" + ed + "\t" + str(sites_dict[k]) +"\t" + new[2] + "\n")
 out.close()
-
-
-

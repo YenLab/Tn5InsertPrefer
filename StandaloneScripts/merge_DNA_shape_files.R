@@ -26,8 +26,3 @@ for (ss in full_sample){
   out <- eval(parse(text = ss))
   write.table(out,paste0(ss,"full_shapes.txt"),sep = "\t",quote = F)
 }
-
-
-
-
-

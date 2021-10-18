@@ -60,5 +60,3 @@ if (opt$chr == "Separate"){
 }
 cat("Processing", opt$bedfile,"...\n")
 cat("Totally",nrow(data_selected),"intervals Processed,Median length is [",median(data_selected$length),"bp]\n")
-
-
