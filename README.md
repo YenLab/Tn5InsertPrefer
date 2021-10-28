@@ -146,3 +146,5 @@ However, if this directory is empty, BiasFreeATAC will create tallymer files in 
 - `_uncorrected_share_peaks.bed` `_uncorrected_specific_peaks.bed` `_corrected_share_peaks.bed` `_corrected_specific_peaks.bed` : Overlaps of uncorrected/corrected peaks for downstream analysis, for example, the TF-enrichment analysis for each peak set.
 
 ## :newspaper:Citation
+
+Houyu Zhang, Ting Lu, Shan Liu, Jianyu Yang, Guohuan Sun, Tao Cheng, Jin Xu, Fangyao Chen, Kuangyu Yen, Comprehensive understanding of Tn5 insertion preference improves transcription regulatory element identification, *NAR Genomics and Bioinformatics*, Volume 3, Issue 4, December 2021, lqab094, https://doi.org/10.1093/nargab/lqab094
