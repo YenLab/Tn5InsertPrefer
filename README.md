@@ -1,4 +1,4 @@
-# Comprehensive understanding of Tn5 insertion preference recovers expansive transcription regulatory lexicon
+# **Comprehensive understanding of Tn5 insertion preference improves transcription regulatory element identification**
 [![Preprint Available](https://img.shields.io/badge/Preprint-online-green.svg)]() [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)   
 
 **:writing_hand:Author**: Houyu Zhang
@@ -28,6 +28,8 @@ To promote bias-corrected ATAC-seq analysis, we hence developed a pipeline for t
   Specifically, the `bash script` and `python script` is for processing data and corresponding `R scripts` is used for downstream analysis, statistics and plotting.
   
 - Scripts in the StandaloneScript folder was called by pipelines.
+
+
 
 
 ## :hammer_and_wrench:BiasFreeATAC: A Tn5-bias corrected ATAC-seq pipeline
