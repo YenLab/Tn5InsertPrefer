@@ -1,5 +1,5 @@
 # **Comprehensive understanding of Tn5 insertion preference improves transcription regulatory element identification**
-[![Preprint Available](https://img.shields.io/badge/Preprint-online-green.svg)]() [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)   
+[![Preprint Available](https://img.shields.io/badge/Preprint-online-green.svg)](https://academic.oup.com/nargab/article/3/4/lqab094/6412601) [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)   
 
 **:writing_hand:Author**: Houyu Zhang
 
