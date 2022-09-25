@@ -42,8 +42,8 @@ We recommend using a conda environment to run this pipeline and you can install 
 
 ```bash
 #Download scripts
-wget https://github.com/YenLab/Tn5InsertPrefer/blob/main/BiasFreeATAC_env.yaml
-wget https://github.com/YenLab/Tn5InsertPrefer/blob/main/BiasFreeATAC
+wget https://raw.githubusercontent.com/YenLab/Tn5InsertPrefer/main/BiasFreeATAC_env.yaml
+wget https://raw.githubusercontent.com/YenLab/Tn5InsertPrefer/main/BiasFreeATAC
 #Install dependencies
 conda env create -f BiasFreeATAC_env.yaml
 source activate BiasFreeATAC_env
