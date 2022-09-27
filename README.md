@@ -41,12 +41,15 @@ BiasFreeATAC pipeline is composed of a bash script and configure `yaml` file, pl
 We recommend using a conda environment to run this pipeline and you can install all dependent packages as following:
 
 ```bash
-#Download scripts
+#1. Install BiasFreeATAC
+#Download associated scripts
 wget https://raw.githubusercontent.com/YenLab/Tn5InsertPrefer/main/BiasFreeATAC_env.yaml
 wget https://raw.githubusercontent.com/YenLab/Tn5InsertPrefer/main/BiasFreeATAC
+
 #Install dependencies
 conda env create -f BiasFreeATAC_env.yaml
 source activate BiasFreeATAC_env
+
 #Install BiasFreeATAC pipeline
 chmod +x BiasFreeATAC
 ```
@@ -54,10 +57,15 @@ chmod +x BiasFreeATAC
 You can find the install instructions of bias correction package seqOutBias (Martins *et al., NAR*, 2017) from 1) [recommended] our pre-compiled [version 1.3.0](https://github.com/YenLab/Tn5InsertPrefer/blob/main/seqOutBias); 2). its [github repository](https://github.com/guertinlab/seqOutBias) for specific version (>=1.3.0); 3) compile from source using command below. Please note seqOutBias is based on Rust, the compiler and other dependencies were installed above using conda, so, you need only to compile seqOutBias:
 
 ```bash
-#Install seqOutBias
+#2. Install Cargo (used for compile seqOutBias)
+git clone https://github.com/rust-lang/cargo
+cd cargo
+cargo build --release
+
+#3. Install seqOutBias
 wget -c https://github.com/guertinlab/seqOutBias/archive/refs/tags/v1.3.0.tar.gz -O seqOutBias.tar.gz
 tar xzf seqOutBias.tar.gz
-cd seqOutBias
+cd seqOutBias-1.3.0
 cargo build --release
 #Export seqOutBias executable file into local PATH or you can add it into ~/.bashrc
 export PATH=$(realpath ./target/release):$PATH
